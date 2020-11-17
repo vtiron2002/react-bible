@@ -94,10 +94,6 @@ const App = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    console.log("state", state);
-  }, [state]);
-
   if (state.loading) return <Loading />;
 
   return (
