@@ -1,11 +1,10 @@
 const urlPrefix = "https://api.scripture.api.bible/v1/bibles";
-const MY_API_KEY = "c04aa8699c8c452196945e80495487d3";
+const MY_API_KEY = "";
 
 const CustomFetch = (url) =>
   fetch(url, {
     headers: {
-      "api-key": "81f316c5f31960d155555818b8d0a59c" || MY_API_KEY,
-      // "api-key": MY_API_KEY,
+      "api-key": MY_API_KEY,
     },
   });
 
