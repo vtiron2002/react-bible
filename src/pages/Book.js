@@ -12,13 +12,14 @@ const StyledChapters = styled.div`
   a {
     padding: 1rem;
     text-decoration: none;
-    color: black;
-    border: 2px solid black;
+    color: ${(p) => p.theme.text};
+    border: 2px solid ${(p) => p.theme.text};
     text-align: center;
     transition: 0.1s ease;
 
     &:hover {
       transform: scale(1.1);
+      color: ${(p) => p.theme.accent};
     }
 
     &:active {
@@ -31,12 +32,13 @@ const Book = ({ history }) => {
   const params = useParams();
   const { versionId, bookId } = params;
   const [state, dispatch] = useBibleContext();
-  const { chapters } = state;
+  const { chapters, books, selectedBook } = state;
 
   useEffect(() => {
     (async () => {
       const data = await getChapters(versionId, bookId);
       dispatch({ type: "SET_CHAPTERS", payload: { data, book: bookId } });
+      window.scrollTo(0, -9999);
     })();
 
     return () =>
@@ -48,13 +50,18 @@ const Book = ({ history }) => {
   }, [history.location.pathname]);
 
   return (
-    <StyledChapters>
-      {chapters.map((c, i) => (
-        <Link key={i} to={`/chapter/${c.bibleId}/${c.bookId}/${c.number}`}>
-          {c.number}
-        </Link>
-      ))}
-    </StyledChapters>
+    <>
+      <h1>
+        Select a chapter from {books.find((b) => b.id === selectedBook)?.name}
+      </h1>
+      <StyledChapters>
+        {chapters.map((c, i) => (
+          <Link key={i} to={`/chapter/${c.bibleId}/${c.bookId}/${c.number}`}>
+            {c.number}
+          </Link>
+        ))}
+      </StyledChapters>
+    </>
   );
 };
 

@@ -8,6 +8,7 @@ export default (state, action) => {
       return set({
         books: action.payload.data,
         selectedVersion: action.payload.version,
+        loading: false,
       });
     case "SET_CHAPTERS":
       return set({
@@ -19,7 +20,19 @@ export default (state, action) => {
     case "COMPONENT_UNMOUNTED":
       return set({ ...action.payload });
     case "COMPONENT_MOUNTED":
+      return set({ ...action.payload, loading: false });
+    case "OPEN_SIDEBAR":
+      return set({ sidebar: true });
+    case "CLOSE_SIDEBAR":
+      return set({ sidebar: false });
+    case "START_LOADING":
+      return set({ loading: true });
+    case "SET_DARKMODE":
       return set({ ...action.payload });
+    case "HANDLE_CHANGE":
+      return set({ searchQuery: action.payload.value });
+    case "FINISH_SEARCH":
+      return set({ searchResults: action.payload.data });
     default:
       return state;
   }

@@ -10,20 +10,29 @@ const StyledBottomNavigation = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  background: white;
+  background: ${(p) => p.theme.navigation};
   padding: 1rem;
   display: flex;
   justify-content: space-between;
-  box-shadow: 0 0 5px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16), 0 -3px 6px rgba(0, 0, 0, 0.23);
 
   button {
     cursor: pointer;
-    border: 1px solid #ccc;
     padding: 0.5rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     transition: 0.2s ease;
+    background: ${(p) => p.theme.background};
+    border: none;
+
+    &:disabled {
+      visibility: hidden;
+    }
+
+    svg {
+      fill: ${(p) => p.theme.text};
+    }
 
     &:hover {
       transform: scale(1.2);
@@ -42,13 +51,20 @@ const StyledChapter = styled.div`
 
   p {
     span.v {
-      color: red;
+      color: ${(p) => p.theme.accent};
       font-size: 1.5rem;
+      margin-right: 0.3rem;
     }
+  }
+
+  p.s {
+    font-weight: bold;
+    margin: 0.5rem 0;
   }
 `;
 
 const StyledChapterTitle = styled.h3`
+  font-size: 2rem;
   margin-bottom: 1rem;
 `;
 
@@ -62,12 +78,26 @@ const Chapter = ({ history }) => {
   useEffect(() => {
     (async () => {
       const data = await getChapter(versionId, bookId, params.chapter);
-      dispatch({ type: "SET_CHAPTER", payload: { data } });
+      dispatch({
+        type: "COMPONENT_MOUNTED",
+        payload: {
+          chapter: data,
+          selectedVersion: versionId,
+          selectedBook: bookId,
+        },
+      });
+      window.scrollTo(0, -9999);
     })();
 
-    return () =>
-      history.location.pathname.includes("/book") &&
-      dispatch({ type: "COMPONENT_UNMOUNTED", payload: { chapter: {} } });
+    return () => {
+      const has = (what) => history.location.pathname.includes(what);
+      const payload = {};
+      payload.chapter = {};
+      if (has("/search")) {
+        payload.selectedBook = null;
+      }
+      dispatch({ type: "COMPONENT_UNMOUNTED", payload });
+    };
   }, [history.location.pathname]);
 
   const nextChapter = () => {

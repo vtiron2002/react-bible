@@ -55,3 +55,17 @@ export const getChapter = async (versionId, bookId, chapter) => {
     console.log(e.message);
   }
 };
+
+export const searchBible = async (versionId, searchTerm, page) => {
+  // https://api.scripture.api.bible/v1/bibles/06125adad2d5898a-01/search?query=john&offset=1
+  const urlSuffix = `/${versionId}/search?query=${searchTerm}&offset=${page - 1}
+  `;
+  try {
+    const res = await CustomFetch(urlPrefix + urlSuffix);
+    if (!res.ok) throw Error(res.statusText);
+    const { data } = await res.json();
+    return data;
+  } catch (e) {
+    console.log(e.message);
+  }
+};

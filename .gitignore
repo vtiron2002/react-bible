@@ -2,3 +2,6 @@ node_modules
 .cache/
 dist/
 apiGuide.md
+.firebase/
+.firebaserc
+firebase.json
